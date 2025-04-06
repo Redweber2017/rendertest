@@ -1,5 +1,11 @@
-FROM eclipse-temurin:17-jdk-alpine
-VOLUME /tmp
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+# Step 1: Build the project
+FROM maven:3.9.0-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Step 2: Run the app
+FROM eclipse-temurin:17
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
