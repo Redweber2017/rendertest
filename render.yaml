@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: render-springboot-app
+    env: docker
+    region: oregon
+    plan: free
+    branch: main
+    dockerfilePath: Dockerfile
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/renderTest-0.0.1-SNAPSHOT.jar
